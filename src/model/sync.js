@@ -3,6 +3,6 @@
  */
 import User from './User';
 
-export default function sync () {
-    User.sync();
+export default function sync (force = false) {
+    User.sync({ force });
 }

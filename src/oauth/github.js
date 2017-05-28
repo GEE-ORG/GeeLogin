@@ -3,6 +3,9 @@
  */
 import {default as fetch} from 'axios';
 import conf from '../conf/oauth';
+import User from '../model/User';
+import crypto from 'crypto';
+import { randomString } from '../utils/random';
 
 export default async function (req, res) {
 
@@ -36,9 +39,21 @@ export default async function (req, res) {
         graphqlUrl,
         userProfileBody,
         userProfileReqData
-    ).then(r => r.data || {});
+    ).then(r => r.data.data.viewer || {});
 
-
+    const salt = randomString();
+    const password = randomString();
+    let passwordEncrypted = crypto.createHash('md5').update(password).digest("hex");
+    passwordEncrypted = crypto.createHash('md5').update(passwordEncrypted + salt).digest("hex");
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const userCreate = User.create({
+        username: userProfile.login,
+        password: passwordEncrypted,
+        salt: salt,
+        email: userProfile.email,
+        avatar: userProfile.avatarUrl,
+        ip
+    }).catch(e => console.log(e));
 
     !req.cookies.accessToken && res.cookie('accessToken', token, {
         path: '/',

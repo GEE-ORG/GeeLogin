@@ -13,6 +13,10 @@ const User = db.define('user', {
     username: {
         type: sequelize.STRING,
         allowNull: false,
+        unique: true
+    },
+    nickname: {
+        type: sequelize.STRING
     },
     password: {
         type: sequelize.STRING,
@@ -21,6 +25,7 @@ const User = db.define('user', {
     email: {
         type: sequelize.STRING,
         allowNull: false,
+        unique: true,
         validate: {
             isEmail: true
         }
@@ -31,12 +36,6 @@ const User = db.define('user', {
     },
     avatar: {
         type: sequelize.STRING,
-    },
-    create_at: {
-        type: sequelize.DATE,
-    },
-    update_at: {
-        type: sequelize.DATE,
     },
     ip: {
         type: sequelize.STRING,
