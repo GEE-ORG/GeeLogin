@@ -2,7 +2,7 @@
  * Created by geeku on 28/05/2017.
  */
 import {default as fetch} from 'axios';
-import conf from '../conf/config';
+import conf from '../conf/oauth';
 
 export default async function (req, res) {
 
@@ -37,6 +37,8 @@ export default async function (req, res) {
         userProfileBody,
         userProfileReqData
     ).then(r => r.data || {});
+
+
 
     !req.cookies.accessToken && res.cookie('accessToken', token, {
         path: '/',

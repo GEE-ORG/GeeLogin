@@ -5,6 +5,10 @@ import express from 'express';
 import { default as cookieParser } from 'cookie-parser';
 import githubOauth from './oauth/github';
 
+import DBSync from './model/sync';
+
+DBSync();
+
 const app = express();
 
 app.use(express.static(__dirname + '/view/public'));
