@@ -12,12 +12,33 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Slab" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 
 </head>
 <body>
 
-<a href="https://github.com/login/oauth/authorize?client_id=6e6d16dc32560e7d5b34&scope=user" class="login">Login with Github</a>
+<div id="app">
+    <h1>GeeLogin</h1>
+    <div class="login">
+        <div class="oauth">
+            <a v-for="item in oauth" :href="item.url">
+                <img :src="'/img/oauth/' + item.name + '.svg'" :alt="item.name">
+            </a>
+        </div>
+        <form action="signin" class="signin">
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+            <input type="submit" value="Signin">
+        </form>
+    </div>
 
+    <div class="footer">
+        Geeku.Net
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/vue/2.3.3/vue.min.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>
