@@ -43,6 +43,9 @@ const User = db.define('user', {
             isIP: true
         }
     },
+    source: {
+        type: sequelize.STRING
+    },
     note: {
         type: sequelize.TEXT('tiny'),
     }
