@@ -59,7 +59,7 @@ export default async function (req, res) {
                 username: userProfile.login,
                 source: 'github'
             }
-        });
+        }).then(user => user.get('id'));
         // if there is no user matched, create one
         !oauthID && (oauthID = await OAuth.create({
             username: userProfile.login,
@@ -80,7 +80,7 @@ export default async function (req, res) {
     });
     session.isLogin = true;
     session.type = 'oauth';
-    session.oid = oauthID;
+    session.uid = oauthID;
 
     console.log(session);
 

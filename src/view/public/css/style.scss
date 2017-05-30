@@ -15,6 +15,9 @@ body {
   color: #122447;
   font-family: 'Josefin Slab' , "Segoe UI" , Roboto , "Segoe UI" , "Helvetica Neue", "PingFang SC", "Noto Sans" , "Noto Sans CJK SC" , "Microsoft YaHei" , sans-serif;
 }
+input {
+  font-family: 'Josefin Slab' , "Segoe UI" , Roboto , "Segoe UI" , "Helvetica Neue", "PingFang SC", "Noto Sans" , "Noto Sans CJK SC" , "Microsoft YaHei" , sans-serif;
+}
 #app {
   text-align: center;
   display: flex;
@@ -25,24 +28,27 @@ body {
     font-weight: 300;
     margin-bottom: 40px;
     flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: url("../img/logo.svg") no-repeat center;
+    background-size: 50px;
+    text-indent: 999999999px;
   }
   .login {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
     flex: 3;
   }
   .oauth {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    p {
+      color: #ddd;
+    }
     a {
       display: inline-block;
       text-decoration: none;
       transition: transform .1s ease-in-out;
-      width: 5vw;
+      width: 50px;
 
       &:hover {
         transform: scale(1.1);
@@ -53,25 +59,58 @@ body {
       }
     }
   }
+  .or {
+    margin-bottom: 30px;
+  }
   .signin {
     display: flex;
     flex-direction: column;
+    align-items: center;
     input {
       border: none;
-      padding: 10px 20px;
-      font-size: 20px;
+      padding: 10px 15px;
+      font-size: 16px;
       margin-bottom: 10px;
       outline: none;
       border-radius: 5px;
       &[type=text],
       &[type=password] {
-        background: #eaf7e5;
+        background: #eee;
         color: #31541a;
+        min-width: 300px;
       }
       &[type=submit] {
         background: #5dc517;
+        background-image: linear-gradient(-225deg, #C9E939 0%, #5DC517 100%);
         color: #fff;
+        width: 200px;
+        margin-top: 20px;
+        &:active {
+          background: #52ac14;
+          background-image: linear-gradient(-225deg, #B3D51D 0%, #4AA20E 100%);
+        }
       }
+    }
+  }
+  .profile {
+    text-align: center;
+    img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+    }
+    p {
+      font-size: 30px;
+      margin: 40px;
+    }
+    .signout {
+      text-decoration: none;
+      background: #d4e2e6;
+      color: #848881;
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 14px;
     }
   }
   .footer {

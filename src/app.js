@@ -4,12 +4,14 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import githubOauth from './oauth/github';
+import githubOAuth from './oauth/github';
+import Auth from './controller/auth';
+import Signout from './controller/signout';
 
 import DBSync from './model/sync';
 
 // DBSync(true) will drop all tables and create new tables
-DBSync(true);
+DBSync();
 
 const app = express();
 
@@ -28,7 +30,9 @@ app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/view/index.html');
 });
 
-app.get('/github', githubOauth);
+app.get('/github', githubOAuth);
+app.get('/auth', Auth);
+app.get('/signout', Signout);
 
 app.listen(3000, function () {
 	console.log('I\'m listening on port 3000! ψ(｀∇´)ψ');
