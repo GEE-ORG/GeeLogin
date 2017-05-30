@@ -15,7 +15,7 @@ DBSync();
 
 const app = express();
 
-app.use(express.static(__dirname + '/view/public'));
+app.use(express.static(__dirname + '/view/'));
 app.use(cookieParser());
 app.use(session({
     resave: false,
