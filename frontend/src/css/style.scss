@@ -1,5 +1,7 @@
 @import "normalize";
 
+$gray-light: #ebf5ed;
+
 body, html {
   padding: 0;
   margin: 0;
@@ -75,9 +77,12 @@ input {
       border-radius: 5px;
       &[type=text],
       &[type=password] {
-        background: #eee;
+        background: $gray-light;
         color: #31541a;
         min-width: 300px;
+        &:focus {
+          box-shadow: 0 5px 10px $gray-light;
+        }
       }
       &[type=submit] {
         background: #5dc517;
@@ -86,8 +91,7 @@ input {
         width: 200px;
         margin-top: 20px;
         &:active {
-          background: #52ac14;
-          background-image: linear-gradient(-225deg, #B3D51D 0%, #4AA20E 100%);
+         filter: brightness(1.05);
         }
       }
     }
@@ -105,7 +109,7 @@ input {
     }
     .signout {
       text-decoration: none;
-      background: #d4e2e6;
+      background: $gray-light;
       color: #848881;
       display: inline-block;
       padding: 5px 10px;
