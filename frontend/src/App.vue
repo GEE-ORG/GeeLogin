@@ -1,12 +1,14 @@
 <template>
   <div id="app">
+    <div id="loading" :class="{'show': this.$store.state.isLoading}"></div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+
 }
 </script>
 
