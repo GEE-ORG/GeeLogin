@@ -4,6 +4,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import cors from 'cors';
 import githubOAuth from './oauth/github';
 import Auth from './controller/auth';
 import Signout from './controller/signout';
@@ -17,6 +18,10 @@ const app = express();
 
 app.use(express.static(__dirname + '/view/'));
 app.use(cookieParser());
+app.use(cors({
+    origin: 'http://localhost:8080',
+    credentials: true
+}));
 app.use(session({
     resave: false,
     saveUninitialized: true,
