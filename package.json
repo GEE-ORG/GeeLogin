@@ -15,8 +15,10 @@
     "cors": "^2.8.3",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
+    "jsonwebtoken": "^7.4.1",
     "mysql": "^2.13.0",
     "mysql2": "^1.2.0",
-    "sequelize": "^3.30.4"
+    "sequelize": "^3.30.4",
+    "sqlite3": "^3.1.8"
   }
 }
