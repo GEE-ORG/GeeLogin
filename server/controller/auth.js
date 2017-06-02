@@ -5,14 +5,18 @@ import User from '../model/User';
 import OAuth from '../model/OAuth';
 
 export default async function (req, res) {
-    const session = req.session;
+    let session = req.session;
 
     if (req.query.sessionid) {
-        req.sessionStore.get(req.query.sessionid, function (error, data) {
-            console.log(data);
-            res.json(data);
-        });
-    } else if (session.isLogin) {
+        session = await new Promise((r, j) => {
+            req.sessionStore.get(req.query.sessionid, function (error, data) {
+                console.log(data);
+                r(data);
+            });
+        }).then(data => data);
+    }
+
+    if (session && session.isLogin) {
         let userProfile = null;
         if (session.type === 'oauth') {
             userProfile = await OAuth.findOne({

@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 app.get('/user', function (req, res) {
     if (req.query.sessionid) {
         res.cookie('sessionid', req.query.sessionid, {
-            maxAge: 1000 * 60 * 60 * 24,
+            maxAge: 1000 * 60 * 60 * 24 * 7,
             path: '/'
         });
         res.redirect('/user');

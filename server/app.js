@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: true,
     secret: 'El psy congroo',
     cookie: {
-        maxAge: 1000 * 60 * 60
+        maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }));
 
