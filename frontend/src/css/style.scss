@@ -25,11 +25,11 @@ input {
   position: fixed;
   top: 0;
   left: 0;
-  height: 3px;
+  height: 2px;
   width: 100%;
   background: #1C89F5;
   animation: 1s loading ease-in-out infinite;
-  //display: none;
+  display: none;
 }
 #loading.show {
   display: block;

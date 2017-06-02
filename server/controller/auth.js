@@ -51,10 +51,14 @@ export default async function (req, res) {
             });
         }
         res.json({
+            state: 1,
             isLogin: true,
             user: userProfile
         });
     } else {
-        res.redirect('/');
+        res.json({
+            state: -1,
+            message: 'Unauthorized!'
+        });
     }
 }
