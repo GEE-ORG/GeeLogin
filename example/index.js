@@ -4,9 +4,15 @@
 const express = require('express');
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 app.use(cookieParser());
+
+var db = new sqlite3.Database('geeguestbook');
+
+const jwtSecret = 'guilty crown';
 
 app.get('/', function (req, res) {
     console.log(__dirname + '/index.html');
@@ -26,14 +32,18 @@ app.get('/signin', function (req, res) {
         method: 'get',
         url: 'http://localhost:3001/auth?sessionid=' + sessionid
     }).then(r => {
-        res.cookie('sessionid', req.query.sessionid, {
+        const token = jwt.sign(r.data.user, jwtSecret);
+        res.cookie('jwt', token, {
             maxAge: 1000 * 60 * 60 * 24 * 7,
-            path: '/',
-            httpOnly: true
+            path: '/'
         });
-        res.json(r.data)
+        res.redirect('/');
     });
-    res.redirect('/user');
+});
+app.post('/comment', function (req, res) {
+    if (jwt.verify(req.cookies.jwt, jwtSecret)) {
+        res.json({state: 1});
+    }
 });
 
 app.listen(3002, function () {
