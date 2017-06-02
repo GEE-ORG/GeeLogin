@@ -16,7 +16,7 @@ DBSync();
 
 const app = express();
 
-app.use(express.static(__dirname + '/view/'));
+// app.use(express.static(__dirname + '/view/'));
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:8080',
@@ -32,12 +32,33 @@ app.use(session({
 }));
 
 app.get('/', function (req, res) {
-	res.sendFile(__dirname + '/view/index.html');
+    const session = req.session;
+    req.query.redirectUrl && (session.redirectUrl = req.query.redirectUrl);
+
+    if (session.isLogin === true) {
+        const redirectUrl = `${session.redirectUrl}/?sessionid=${session.id}`;
+        console.log(redirectUrl);
+        res.redirect(redirectUrl);
+        return;
+    }
+    res.redirect('/login/');
+
+	// res.sendFile(__dirname + '/view/index.html');
 });
 
 app.get('/github', githubOAuth);
 app.get('/auth', Auth);
 app.get('/signout', Signout);
+app.get('/session', function (req, res) {
+    console.log(req.sessionStore);
+    req.sessionStore.get(req.sessionID, function (error, d) {
+        console.log(req.sessionID);
+        res.send({error,d});
+    });
+    req.sessionStore.length(function (error, d) {
+        console.log(error, d);
+    });
+});
 
 app.listen(3000, function () {
 	console.log('I\'m listening on port 3000! ψ(｀∇´)ψ');

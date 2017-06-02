@@ -7,7 +7,12 @@ import OAuth from '../model/OAuth';
 export default async function (req, res) {
     const session = req.session;
 
-    if (session.isLogin) {
+    if (req.query.sessionid) {
+        req.sessionStore.get(req.query.sessionid, function (error, data) {
+            console.log(data);
+            res.json(data);
+        });
+    } else if (session.isLogin) {
         let userProfile = null;
         if (session.type === 'oauth') {
             userProfile = await OAuth.findOne({
