@@ -25,7 +25,7 @@
         <span>{{user.username}}</span>
     </div>
     <form action="/comment" id="comment" @submit.prevent="addComment" v-if="isLogin">
-        <textarea name="c" id="" cols="30" rows="10"></textarea>
+        <textarea name="content" id="" cols="30" rows="10"></textarea>
         <input type="submit" value="Submit">
     </form>
     <ul class="comments">
@@ -51,13 +51,24 @@
         },
         methods: {
             addComment () {
-                axios.post('/comment', new FormData(document.querySelector('#comment')))
+                const content = document.querySelector('#comment textarea').value;
+                axios.post('/comment', { content: content })
                     .then(r => {
-                        console.log(r.data);
+                        this.comments.push({
+                            username: this.user.username,
+                            avatar: this.user.avatar,
+                            content: content
+                        });
                     })
             }
         },
         created () {
+            
+            axios.get('/comment').then(r => {
+                console.log(r.data);
+                this.comments = r.data
+            });
+
             const jwtToken = document.cookie.split(';').filter(item => item.trim().split('=')[0] === 'jwt')[0];
             if (!jwtToken) {
                 return;

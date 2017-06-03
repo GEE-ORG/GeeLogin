@@ -1,14 +1,19 @@
 /**
  * Created by geeku on 02/06/2017.
  */
+const fs = require('fs');
 const express = require('express');
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3').verbose();
 
+let commentList = require('./commentList.json');
+
 const app = express();
 app.use(cookieParser());
+app.use(bodyParser.json());
 
 var db = new sqlite3.Database('geeguestbook');
 
@@ -40,9 +45,26 @@ app.get('/signin', function (req, res) {
         res.redirect('/');
     });
 });
+app.get('/comment', function (req, res) {
+    res.json(commentList);
+});
 app.post('/comment', function (req, res) {
     if (jwt.verify(req.cookies.jwt, jwtSecret)) {
-        res.json({state: 1});
+        const user = jwt.decode(req.cookies.jwt);
+        // const user = jwtDecode.payload;
+        // console.log(jwtDecode);
+        console.log(req.body);
+        commentList.push({
+            username: user.username,
+            avatar: user.avatar,
+            source: user.source,
+            content: req.body.content
+        });
+        fs.writeFileSync('./commentList.json', JSON.stringify(commentList));
+        res.json({
+            state: 1,
+            msg: 'Insert successful'
+        });
     }
 });
 
