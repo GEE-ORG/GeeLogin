@@ -70,7 +70,8 @@ app.post('/comment', function (req, res) {
             username: user.username,
             avatar: user.avatar,
             source: user.source,
-            content: req.body.content
+            content: req.body.content,
+            time: new Date()
         });
         fs.writeFileSync('./commentList.json', JSON.stringify(commentList));
         res.json({

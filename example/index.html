@@ -18,6 +18,8 @@
         :root {
             --main-color: #0e79f1;
             --dark: #2f4560;
+            --gray: #e6f5ff;
+            --gray-darken: #95acb6;
         }
         html, body {
             height: 100%;
@@ -65,10 +67,11 @@
         }
         #comment {
             text-align: right;
+            margin-bottom: 40px;
         }
         #comment textarea {
             border: none;
-            background: #e6f5ff;
+            background: var(--gray);
             width: 100%;
             max-width: 100%;
             padding: 20px 25px;
@@ -94,6 +97,38 @@
         #comment input:hover {
             box-shadow: 0 10px 10px #aed0ff;
         }
+        .comments {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .comments li {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        .comments li img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .comments .content {
+            flex: 1;
+        }
+        .comments li .meta {
+            margin-bottom: 10px;
+        }
+        .comments li time {
+            font-size: 12px;
+            color: var(--gray-darken);
+        }
+        .comments li p {
+            margin: 0;
+            min-height: 50px;
+            background: var(--gray);
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -114,7 +149,13 @@
     <ul class="comments">
         <li v-for="comment in comments">
             <img :src="comment.avatar" alt="avatar">
-            <p>{{comment.content}}</p>
+            <div class="content">
+                <div class="meta">
+                    <span>{{comment.username}}</span>
+                    <time>{{comment.time}}</time>
+                </div>
+                <p>{{comment.content}}</p>
+            </div>
         </li>
     </ul>
 </div>
@@ -141,10 +182,11 @@
                             alert(r.data.msg);
                             return;
                         }
-                        this.comments.push({
+                        this.comments.unshift({
                             username: this.user.username,
                             avatar: this.user.avatar,
-                            content: content
+                            content: content,
+                            time: (new Date()).toString()
                         });
                     })
             }
@@ -153,7 +195,7 @@
             
             axios.get('/comment').then(r => {
                 console.log(r.data);
-                this.comments = r.data
+                this.comments = r.data.reverse();
             });
 
             const jwtToken = document.cookie.split(';').filter(item => item.trim().split('=')[0] === 'jwt')[0];
