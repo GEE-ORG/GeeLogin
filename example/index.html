@@ -13,6 +13,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
     <meta name="theme-color" content="#363d4c">
+
+    <style>
+        :root {
+            --main-color: #0e79f1;
+            --dark: #2f4560;
+        }
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            color: var(--dark);
+        }
+        body * {
+            box-sizing: border-box;
+        }
+        input {
+            color: var(--dark);
+            font-size: 18px;
+        }
+        a:link {
+            text-decoration: none;
+            color: var(--main-color);
+        }
+        a:hover {
+            color: #42d0dd;
+        }
+        #app {
+            width: 500px;
+            margin: 0 auto;
+            padding: 40px 0;
+            font-size: 18px;
+            display: flex;
+            flex-direction: column;
+        }
+        .user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .user img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user a {
+            margin: 0 10px;
+            font-size: 14px;
+        }
+        #comment {
+            text-align: right;
+        }
+        #comment textarea {
+            border: none;
+            background: #e6f5ff;
+            width: 100%;
+            max-width: 100%;
+            padding: 20px 25px;
+            font-size: 18px;
+            color: var(--dark);
+            border-radius: 5px;
+            height: 300px;
+            max-height: 100px;
+        }
+        #comment textarea:focus {
+            outline: none;
+        }
+        #comment input {
+            border: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background: linear-gradient(to bottom right, #42f0ff, var(--main-color));
+            color: #fff;
+            box-shadow: 0 5px 5px #aed0ff;
+            transition: box-shadow .2s ease-in-out;
+        }
+        #comment input:hover {
+            box-shadow: 0 10px 10px #aed0ff;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,9 +102,10 @@
     <div class="signin" v-if="!isLogin">
         <a href="http://localhost:3001/?redirectUrl=http://localhost:3002/signin">Sign in</a>
     </div>
-    <div class="user" v-else="">
-        <span><img :src="user.avatar" alt="avatar"></span>
+    <div class="user" v-else>
+        <img :src="user.avatar" alt="avatar">
         <span>{{user.username}}</span>
+        <a href="/signout">Sign Out</a>
     </div>
     <form action="/comment" id="comment" @submit.prevent="addComment" v-if="isLogin">
         <textarea name="content" id="" cols="30" rows="10"></textarea>
@@ -54,6 +137,10 @@
                 const content = document.querySelector('#comment textarea').value;
                 axios.post('/comment', { content: content })
                     .then(r => {
+                        if (r.data.state < 0) {
+                            alert(r.data.msg);
+                            return;
+                        }
                         this.comments.push({
                             username: this.user.username,
                             avatar: this.user.avatar,

@@ -45,6 +45,18 @@ app.get('/signin', function (req, res) {
         res.redirect('/');
     });
 });
+app.get('/signout', function(req, res) {
+    res.cookie('sessionid', '', {
+        maxAge: 0,
+        path: '/',
+        httpOnly: true
+    });
+    res.cookie('jwt', '', {
+            maxAge: 0,
+            path: '/'
+    });
+    res.redirect('/');
+});
 app.get('/comment', function (req, res) {
     res.json(commentList);
 });
@@ -64,6 +76,11 @@ app.post('/comment', function (req, res) {
         res.json({
             state: 1,
             msg: 'Insert successful'
+        });
+    } else {
+        res.json({
+            state: -1,
+            msg: 'JWT verify failed!'
         });
     }
 });
