@@ -11,6 +11,11 @@ const sqlite3 = require('sqlite3').verbose();
 
 let commentList = require('./commentList.json');
 
+function formateDate () {
+    const date = new Date();
+    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+}
+
 const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -71,7 +76,7 @@ app.post('/comment', function (req, res) {
             avatar: user.avatar,
             source: user.source,
             content: req.body.content,
-            time: new Date()
+            time: formateDate()
         });
         fs.writeFileSync('./commentList.json', JSON.stringify(commentList));
         res.json({

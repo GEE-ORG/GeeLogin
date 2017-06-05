@@ -33,9 +33,17 @@
         input {
             color: var(--dark);
             font-size: 18px;
+            outline: none;
+        }
+        input:focus
+        input:active {
+            outline: none;
         }
         a:link {
             text-decoration: none;
+            color: var(--main-color);
+        }
+        a:visited {
             color: var(--main-color);
         }
         a:hover {
@@ -48,6 +56,17 @@
             font-size: 18px;
             display: flex;
             flex-direction: column;
+        }
+        .signin {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .signin a {
+            display: inline-block;
+            padding: 5px 10px;
+            color: #fff;
+            border-radius: 5px;
+            background: linear-gradient(to bottom right, #42f0ff, var(--main-color));
         }
         .user {
             display: flex;
@@ -163,6 +182,10 @@
 <script src="https://cdn.bootcss.com/vue/2.3.3/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.16.1/axios.min.js"></script>
 <script>
+    function formateDate () {
+        const date = new Date();
+        return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDay()}`;
+    }
     new Vue({
         el: '#app',
         data: {
@@ -171,10 +194,14 @@
               username: 'Anonymous'
             },
             isLogin: false,
-            comments: []
+            comments: [],
+            delay: false
         },
         methods: {
             addComment () {
+                if (this.delay) {
+                    alert('Too often');
+                }
                 const content = document.querySelector('#comment textarea').value;
                 axios.post('/comment', { content: content })
                     .then(r => {
@@ -186,8 +213,12 @@
                             username: this.user.username,
                             avatar: this.user.avatar,
                             content: content,
-                            time: (new Date()).toString()
+                            time: formateDate()
                         });
+                        this.delay = true;
+                        setTimeout(() => {
+                            this.delay = false;
+                        })
                     })
             }
         },
