@@ -5,6 +5,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import cors from 'cors';
+import RedisExpress from 'connect-redis';
+import { redis } from './conf/database';
 import githubOAuth from './oauth/github';
 import Auth from './controller/auth';
 import Signout from './controller/signout';
@@ -13,6 +15,8 @@ import DBSync from './model/sync';
 
 // DBSync(true) will drop all tables and create new tables
 DBSync();
+
+const RedisStore = RedisExpress(session);
 
 const app = express();
 
@@ -23,6 +27,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(session({
+    store: new RedisStore(redis),
     resave: false,
     saveUninitialized: true,
     secret: 'El psy congroo',
@@ -35,9 +40,8 @@ app.get('/', function (req, res) {
     const session = req.session;
     req.query.redirectUrl && (session.redirectUrl = req.query.redirectUrl);
 
-    if (session.isLogin === true) {
+    if (session.isLogin === true && session.redirectUrl) {
         const redirectUrl = `${session.redirectUrl}/?sessionid=${session.id}`;
-        console.log(redirectUrl);
         res.redirect(redirectUrl);
         return;
     }

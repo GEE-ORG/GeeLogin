@@ -1,8 +1,7 @@
 <template>
   <div class="profile">
     <img :src="$store.state.user.avatar" alt="avatar">
-    <p class="username">{{ $store.state.user.username }}</p>
-    <a href="/signout" class="signout">Sign out</a>
+    <p class="username">{{ $store.state.user.username }} <a href="/signout" class="signout">Sign out</a></p>
   </div>
 </template>
 
