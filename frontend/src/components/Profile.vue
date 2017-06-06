@@ -1,7 +1,15 @@
 <template>
   <div class="profile">
     <img :src="$store.state.user.avatar" alt="avatar">
-    <p class="username">{{ $store.state.user.username }} <a href="/signout" class="signout">Sign out</a></p>
+    <p class="username">
+      <img :src="sourceImgPath()" alt="source" class="source">
+      <span>{{ $store.state.user.username }}</span>
+      <a href="/signout" class="signout">Sign out</a>
+    </p>
+    <div class="signup">
+      <button id="signup">Sign up with current profile</button>
+      <button id="link-account">Or link to an exist account</button>
+    </div>
   </div>
 </template>
 
@@ -22,6 +30,11 @@
             this.$store.commit('updateUser', data.user)
           }
         });
+    },
+    methods: {
+      sourceImgPath () {
+        return require('../assets/oauth/' + this.$store.state.user.source + '.svg');
+      }
     }
   }
 </script>
