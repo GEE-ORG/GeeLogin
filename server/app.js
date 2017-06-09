@@ -3,6 +3,7 @@
  */
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 import session from 'express-session';
 import cors from 'cors';
 import RedisExpress from 'connect-redis';
@@ -10,6 +11,7 @@ import { redis } from './conf/database';
 import githubOAuth from './oauth/github';
 import Auth from './controller/auth';
 import Signout from './controller/signout';
+import checkName from './controller/checkName';
 
 import DBSync from './model/sync';
 
@@ -22,6 +24,7 @@ const app = express();
 
 // app.use(express.static(__dirname + '/view/'));
 app.use(cookieParser());
+app.use(bodyParser());
 app.use(cors({
     origin: 'http://localhost:8080',
     credentials: true
@@ -37,7 +40,7 @@ app.use(session({
 }));
 
 app.get('/', function (req, res) {
-    const session = req.session;
+    const session = req.session || '';
     req.query.redirectUrl && (session.redirectUrl = req.query.redirectUrl);
 
     if (session.isLogin === true && session.redirectUrl) {
@@ -53,6 +56,7 @@ app.get('/', function (req, res) {
 app.get('/github', githubOAuth);
 app.get('/auth', Auth);
 app.get('/signout', Signout);
+app.post('/checkName', checkName);
 app.get('/session', function (req, res) {
     console.log(req.sessionStore);
     req.sessionStore.get(req.sessionID, function (error, d) {

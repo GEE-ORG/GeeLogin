@@ -54,7 +54,7 @@ if (!Vue.prototype.$http) {
       },
     }).then(r => r);
     store.commit('loaded');
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   }
 }
