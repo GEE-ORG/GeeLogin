@@ -3,3 +3,6 @@
  */
 import User from '../model/User';
 
+export default async function (req, res) {
+    res.json(req.body);
+}

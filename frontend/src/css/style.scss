@@ -2,6 +2,7 @@
 
 $green: #5dc517;
 $gray-light: #ebf5ed;
+$gray: #cbd5cd;
 
 body, html {
   padding: 0;
@@ -147,6 +148,15 @@ input[type=button] {
         margin-top: 20px;
         &:focus {
           border-color: #5DC517;
+        }
+      }
+      &.reset {
+        background: none;
+        color: $gray;
+        box-shadow: none;
+        margin: 10px auto;
+        &:hover {
+          color: $gray;
         }
       }
     }

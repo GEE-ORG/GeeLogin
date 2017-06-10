@@ -39,14 +39,16 @@
         placeholder="Password"
         name="password"
         required
+        ref="password"
         v-model="password"
         v-show="finalStep"
       >
 
-      <input type="button" value="reset" v-show="step > 0" @click="reset">
-      <input type="button" value="NEXT" v-show="!finalStep" @click="next">
+      <input type="button" value="NEXT" v-if="!finalStep" @click="next">
 
       <input type="submit" :value="submitVal" v-model="submitVal" v-show="finalStep">
+
+      <input type="button" value="reset" class="reset" v-show="step > 0" @click="reset">
     </form>
   </div>
 </template>
@@ -82,8 +84,10 @@
           return require('../assets/oauth/' + name + '.svg');
       },
       signin () {
-        if (!this.finalStep) {
-            this.next();
+        if (this.userExist) {
+          this.$http('post', '/signin', { name: this.name, password: this.password }).then(data => {
+            console.log(data);
+          });
         }
       },
       reset () {
@@ -130,6 +134,12 @@
     computed: {
       submitVal () {
           return this.userExist ? 'Sign in' : 'Sign up';
+      }
+    },
+    watch: {
+      finalStep: function (val) {
+          console.log(val,this.$refs.password);
+          val && this.$nextTick(() => this.$refs.password.focus());
       }
     }
   }
