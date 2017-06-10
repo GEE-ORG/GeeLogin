@@ -7,9 +7,9 @@ import OAuth from '../model/OAuth';
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export default async function (req, res) {
-    const username = req.body.username;
-    const isEmail = emailRegex.test(username);
-    const query = isEmail ? { email: username } : { username: username };
+    const name = req.body.name;
+    const isEmail = emailRegex.test(name);
+    const query = isEmail ? { email: name } : { username: name };
     const userExist = await User.findOne({
         where: query
     }).then(user => {
