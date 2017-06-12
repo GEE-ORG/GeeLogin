@@ -7,35 +7,41 @@
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data () {
+  let tipID = '';
+  export default {
+    name: 'app',
+    data () {
       return {
         tip: '',
         tipShow: false
       }
-  },
-  methods: {
-    onTip (m) {
-      this.tipShow = true;
-      this.tip = m;
-      setTimeout(() => {
-        this.tipShow = false;
-        this.tip = '';
-      }, 5000);
-    }
-  },
-  beforeMount () {
-    this.$http('get', '/auth').then(data => {
-      if (data.state < 0) {
-        return;
-      } else {
-        this.$store.commit('updateUser', data.user);
-        this.$router.push({'name': 'Profile'});
+    },
+    methods: {
+      onTip (m) {
+        if (tipID) {
+          this.tipShow = false;
+          this.tip = '';
+          clearTimeout(tipID);
+        }
+        this.tipShow = true;
+        this.tip = m;
+        tipID = setTimeout(() => {
+          this.tipShow = false;
+          this.tip = '';
+        }, 5000);
       }
-    });
+    },
+    beforeMount () {
+      this.$http('get', '/auth').then(data => {
+        if (data.state < 0) {
+          return;
+        } else {
+          this.$store.commit('updateUser', data.user);
+          this.$router.push({'name': 'Profile'});
+        }
+      });
+    }
   }
-}
 </script>
 
 <style lang="scss">

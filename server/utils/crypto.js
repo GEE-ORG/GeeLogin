@@ -9,8 +9,8 @@ export function md5 (string) {
     return crypto.createHash('md5').update(string).digest("hex");
 }
 
-export function encryptPassword (password) {
-    const salt = randomString();
+export function encryptPassword (password, salt = '') {
+    salt = salt || randomString();
     password = md5(md5(password) + salt);
 
     return { password, salt };

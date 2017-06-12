@@ -3,10 +3,11 @@
  */
 import User from '../model/User';
 import OAuth from '../model/OAuth';
-import { encryptPassword } from '../utils/crypto';
+import { encryptPassword, md5 } from '../utils/crypto';
 import { getIP } from '../utils/net';
+import CONST from '../utils/const';
 
-const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const emailRegex = CONST.REGEX.EMAIL;
 
 export default async function (req, res) {
 
@@ -69,6 +70,8 @@ export default async function (req, res) {
         }).then(data => data);
         userProfile.source = oauthProfile.get('source');
         userProfile.avatar = oauthProfile.get('avatar');
+    } else {
+        userProfile.avatar = 'https://cn.gravatar.com/avatar/' + md5(userProfile.email);
     }
 
     const userCreated = await User.create(userProfile).then(data => data);

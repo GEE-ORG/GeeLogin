@@ -39,6 +39,7 @@
         },
         isSignIn: true,
         userExist: false,
+        signInCount: 0,
         oauth: [
           {
             name: 'github',
@@ -55,9 +56,20 @@
         this.isSignIn = !this.isSignIn;
       },
       signin () {
+        if (this.signInCount > 5) {
+          this.$emit('tip', 'Please try again later(10s).');
+          setTimeout(() => this.signInCount = 0, 10000);
+          return;
+        }
+        this.signInCount++;
         this.validator();
         this.$http('post', '/signin', this.user).then(data => {
-          console.log(data);
+          this.$emit('tip', data.msg);
+          if (data.state < 0) {
+
+          } else {
+            this.$router.push({'name': 'Profile'});
+          }
         });
       },
       signup () {
@@ -67,7 +79,7 @@
           if (data.state < 0) {
 
           } else {
-
+            this.isSignIn = true;
           }
         });
       },

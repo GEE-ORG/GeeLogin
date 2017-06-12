@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     user: {
       username: 'Anonymous',
       avatar: '',
-      source: 'Anonymous',
+      source: '',
       email: 'Anonymous@Anonymous',
       uid: -1
     }

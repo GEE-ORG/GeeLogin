@@ -17,47 +17,13 @@ export default async function (req, res) {
     }
 
     if (session && session.isLogin) {
-        let userProfile = null;
+        let userProfile = {
+            username: session.username,
+            avatar: session.avatar,
+            email: session.email,
+        };
         if (session.type === 'oauth') {
-            userProfile = await OAuth.findOne({
-                where: {
-                    id: session.uid
-                }
-            }).then(user => {
-                return {
-                    username: user.username,
-                    avatar: user.avatar,
-                    email: user.email,
-                    source: user.source,
-                    uid: user.uid
-                }
-            });
-            if (userProfile.uid) {
-                userProfile = await User.findOne({
-                    where: {
-                        uid: userProfile.uid
-                    }
-                }).then(user => {
-                    return {
-                        username: user.username,
-                        avatar: user.avatar,
-                        email: user.email,
-                        source: userProfile.source
-                    }
-                });
-            }
-        } else {
-            userProfile = await User.findOne({
-                where: {
-                    uid: session.uid
-                }
-            }).then(user => {
-                return {
-                    username: user.username,
-                    avatar: user.avatar,
-                    email: user.email
-                }
-            });
+            userProfile.source = session.source;
         }
         res.json({
             state: 1,

@@ -1,12 +1,12 @@
 <template>
   <div class="profile">
-    <img :src="$store.state.user.avatar" alt="avatar">
+    <img :src="$store.state.user.avatar + '?s=200'" alt="avatar">
     <p class="username">
-      <img :src="sourceImgPath()" alt="source" class="source">
+      <img alt="source" class="source" :src="sourceImgPath()" v-if="$store.state.user.source">
       <span>{{ $store.state.user.username }}</span>
       <a href="/signout" class="signout">Sign out</a>
     </p>
-    <div class="signup">
+    <div class="signup" v-if="$store.state.user.source">
       <button id="signup">Sign up with current profile</button>
       <button id="link-account">Or link to an exist account</button>
     </div>

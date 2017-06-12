@@ -82,6 +82,9 @@ export default async function (req, res) {
     session.type = 'oauth';
     session.uid = oauthID;
     session.source = 'github';
+    session.username = userProfile.login;
+    session.avatar = userProfile.avatarUrl;
+    session.email = userProfile.email;
 
     console.log(session);
 
