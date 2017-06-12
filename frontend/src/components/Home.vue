@@ -7,49 +7,18 @@
       </a>
     </div>
     <div class="or">- OR -</div>
-    <form action="signin" class="signin" @submit.prevent="signin">
-      <input
-        type="text"
-        placeholder="Username/Email"
-        name="name"
-        autofocus
-        required
-        v-model="name"
-        @keyup.enter="next"
-        v-show="step === 0"
-      >
-      <input
-        type="text"
-        placeholder="Email"
-        name="email"
-        v-model="email"
-        v-if="needEmail"
-        @keyup.enter="next"
-      >
-      <input
-        type="text"
-        placeholder="Username"
-        name="username"
-        v-model="username"
-        v-if="needUsername"
-        @keyup.enter="next"
-      >
-      <input
-        type="password"
-        placeholder="Password"
-        name="password"
-        required
-        ref="password"
-        v-model="password"
-        v-show="finalStep"
-      >
-
-      <input type="button" value="NEXT" v-if="!finalStep" @click="next">
-
-      <input type="submit" :value="submitVal" v-model="submitVal" v-show="finalStep">
-
-      <input type="button" value="reset" class="reset" v-show="step > 0" @click="reset">
+    <form action="/signin" class="signin" @submit.prevent="signin" v-if="isSignIn">
+      <input type="text" name="name" placeholder="Username/Email" v-model="user.name" required autofocus>
+      <input type="password" name="password" placeholder="Password" v-model="user.password" required>
+      <input type="submit" value="Sign In">
     </form>
+    <form action="/signup" class="signup" @submit.prevent="signup" v-else>
+      <input type="text" name="username" placeholder="Username" v-model="user.username" required autofocus>
+      <input type="email" name="email" placeholder="Email" v-model="user.email" required>
+      <input type="password" name="password" placeholder="Password" v-model="user.password" required>
+      <input type="submit" value="Sign Up">
+    </form>
+    <input type="button" :value="isSignIn ? 'Sign Up' : 'Sign In'" class="sign-in-up" @click="signInOrUp">
   </div>
 </template>
 
@@ -62,15 +31,14 @@
     name: 'home',
     data () {
       return {
-        name: '',
-        username: '',
-        password: '',
-        email: '',
+        user: {
+          name: '',
+          username: '',
+          password: '',
+          email: '',
+        },
+        isSignIn: true,
         userExist: false,
-        needEmail: false,
-        needUsername: false,
-        step: 0,
-        finalStep: false,
         oauth: [
           {
             name: 'github',
@@ -83,63 +51,42 @@
       oauthImgPath (name) {
           return require('../assets/oauth/' + name + '.svg');
       },
+      signInOrUp () {
+        this.isSignIn = !this.isSignIn;
+      },
       signin () {
-        if (this.userExist) {
-          this.$http('post', '/signin', { name: this.name, password: this.password }).then(data => {
-            console.log(data);
-          });
+        this.validator();
+        this.$http('post', '/signin', this.user).then(data => {
+          console.log(data);
+        });
+      },
+      signup () {
+        this.validator();
+        this.$http('post', '/signup', this.user).then(data => {
+          this.$emit('tip', data.msg);
+          if (data.state < 0) {
+
+          } else {
+
+          }
+        });
+      },
+      validator (val) {
+        if (!this.user.password) {
+          this.$emit('tip', 'Password is required!');
+          return;
         }
-      },
-      reset () {
-        this.name = '';
-        this.username = '';
-        this.password = '';
-        this.email = '';
-        this.userExist = false;
-        this.needEmail = false;
-        this.needUsername = false;
-        this.step = 0;
-        this.finalStep = false;
-      },
-      next () {
-        const steps = {
-          0: async () => {
-            await this.checkName(this.name);
-            if (this.userExist) {
-              this.finalStep = true;
-            } else {
-              if (emailRegex.test(this.name)) {
-                this.needUsername = true;
-              } else {
-                this.needEmail = true;
-              }
-              this.needUsername && await this.checkName(this.username);
-              this.needEmail && await this.checkName(this.email);
-            }
-          },
-          1: () => {
-            this.finalStep = true;
+        if (this.isSignIn) {
+          if (!this.user.name) {
+            this.$emit('tip', 'Username or email is required!');
+            return;
+          }
+        } else {
+          if (!this.user.username || !this.user.email) {
+            this.$emit('tip', 'Username and email is required!');
+            return;
           }
         }
-        steps[this.step++]();
-      },
-      checkName (val) {
-        return this.$http('post', '/checkName', { name: val }).then(data => {
-            console.log(data);
-            this.userExist = data.userExist;
-            return this.userExist;
-        });
-      }
-    },
-    computed: {
-      submitVal () {
-          return this.userExist ? 'Sign in' : 'Sign up';
-      }
-    },
-    watch: {
-      finalStep: function (val) {
-          console.log(val,this.$refs.password);
-          val && this.$nextTick(() => this.$refs.password.focus());
       }
     }
   }

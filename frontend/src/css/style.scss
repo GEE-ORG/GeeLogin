@@ -19,14 +19,31 @@ body {
   align-items: center;
   flex-direction: column;
   color: #122447;
+  box-sizing: border-box;
   font-family: 'Josefin Slab' , "Segoe UI" , Roboto , "Segoe UI" , "Helvetica Neue", "PingFang SC", "Noto Sans" , "Noto Sans CJK SC" , "Microsoft YaHei" , sans-serif;
 }
 input {
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  outline: none;
+  border-radius: 5px;
+  display: block;
   font-family: 'Josefin Slab' , "Segoe UI" , Roboto , "Segoe UI" , "Helvetica Neue", "PingFang SC", "Noto Sans" , "Noto Sans CJK SC" , "Microsoft YaHei" , sans-serif;
+  background: $gray-light;
+  color: #31541a;
+  border: 1px solid transparent;
+  &:focus {
+    border-color: #5DC517;
+  }
+}
+body * {
+  box-sizing: inherit;
 }
 button,
 input[type=submit],
-input[type=button] {
+input[type=button]{
   border: none;
   padding: 10px 20px;
   background: linear-gradient(-225deg, #C9E939 0%, #5DC517 100%);
@@ -37,6 +54,9 @@ input[type=button] {
   transition: box-shadow .2s ease-in-out;
   &:hover {
     box-shadow: 0 10px 20px rgba(1,2,0,.2);
+  }
+  &:focus {
+    outline: none;
   }
   &:active {
     outline: none;
@@ -85,6 +105,8 @@ input[type=button] {
   background-size: 50px;
   text-indent: 999999999px;
   padding: 40px 0;
+  width: 100%;
+  overflow: hidden;
 }
 #app {
   text-align: center;
@@ -122,27 +144,13 @@ input[type=button] {
   .or {
     margin-bottom: 30px;
   }
-  .signin {
+  [class^=sign] {
     input {
-      border: none;
-      padding: 10px 15px;
-      font-size: 16px;
-      margin-bottom: 10px;
-      outline: none;
-      border-radius: 5px;
-      display: block;
-      &[type=text],
-      &[type=password] {
-        background: $gray-light;
-        color: #31541a;
-        min-width: 300px;
-        border: 1px solid transparent;
-        &:focus {
-          border-color: #5DC517;
-        }
-      }
+      min-width: 300px;
       &[type=submit],
-      &[type=button]{
+      &[type=button] {
+        display: inline-block;
+        min-width: 200px;
         width: 200px;
         margin: 0 auto;
         margin-top: 20px;
@@ -150,15 +158,16 @@ input[type=button] {
           border-color: #5DC517;
         }
       }
-      &.reset {
-        background: none;
-        color: $gray;
-        box-shadow: none;
-        margin: 10px auto;
-        &:hover {
-          color: $gray;
-        }
-      }
+    }
+  }
+  .sign-in-up {
+    background: none;
+    color: $gray;
+    box-shadow: none;
+    margin: 10px auto;
+    font-size: 14px;
+    &:hover {
+      color: $gray;
     }
   }
   .profile {

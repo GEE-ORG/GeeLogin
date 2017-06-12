@@ -1,13 +1,30 @@
 <template>
   <div id="app">
     <div id="loading" :class="{'show': $store.state.isLoading}"></div>
-    <router-view></router-view>
+    <div class="tip" v-show="tipShow">{{tip}}</div>
+    <router-view @tip="onTip"></router-view>
   </div>
 </template>
 
 <script>
 export default {
   name: 'app',
+  data () {
+      return {
+        tip: '',
+        tipShow: false
+      }
+  },
+  methods: {
+    onTip (m) {
+      this.tipShow = true;
+      this.tip = m;
+      setTimeout(() => {
+        this.tipShow = false;
+        this.tip = '';
+      }, 5000);
+    }
+  },
   beforeMount () {
     this.$http('get', '/auth').then(data => {
       if (data.state < 0) {
@@ -23,4 +40,18 @@ export default {
 
 <style lang="scss">
 @import "./css/style";
+  .tip {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    min-width: 200px;
+    background: #5DC517;
+    padding: 10px 20px;
+    transform: translateX(-50%);
+    word-wrap: break-word;
+    white-space: normal;
+    color: #fff;
+    border-radius: 0 0 5px 5px ;
+    box-shadow: 0 10px 20px rgba(1,2,0,.2);;
+  }
 </style>

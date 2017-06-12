@@ -13,6 +13,7 @@ import Auth from './controller/auth';
 import Signout from './controller/signout';
 import checkName from './controller/checkName';
 import Signin from './controller/signin';
+import Signup from './controller/signup';
 import graphqlHTTP from 'express-graphql';
 
 import DBSync from './model/sync';
@@ -27,6 +28,7 @@ const app = express();
 // app.use(express.static(__dirname + '/view/'));
 app.use(cookieParser());
 app.use(bodyParser());
+app.use(bodyParser.urlencoded());
 app.use(bodyParser.text({
     type: 'application/graphql'
 }));
@@ -63,6 +65,8 @@ app.get('/auth', Auth);
 app.get('/signout', Signout);
 app.post('/checkName', checkName);
 app.post('/signin', Signin);
+app.post('/signup', Signup);
+
 
 import { graphql as GraphQL, buildSchema } from 'graphql';
 
