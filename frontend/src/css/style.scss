@@ -203,6 +203,10 @@ input[type=button]{
         background: none;
         color: #ccc;
         font-size: 14px;
+        box-shadow: none;
+        &:hover {
+          color: $gray;
+        }
       }
     }
     .username {

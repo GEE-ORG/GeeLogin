@@ -10,11 +10,12 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     isLoading: false,
+    isSignIn: true,
     user: {
-      username: 'Anonymous',
+      username: '',
       avatar: '',
       source: '',
-      email: 'Anonymous@Anonymous',
+      email: '',
       uid: -1
     }
   },
@@ -30,6 +31,9 @@ const store = new Vuex.Store({
     },
     updateUser (state, user) {
       state.user = Object.assign(state.user, user);
+    },
+    setSignIn (state, isSignIn) {
+      state.isSignIn = isSignIn;
     }
   }
 })

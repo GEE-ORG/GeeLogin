@@ -7,7 +7,7 @@
       </a>
     </div>
     <div class="or">- OR -</div>
-    <form action="/signin" class="signin" @submit.prevent="signin" v-if="isSignIn">
+    <form action="/signin" class="signin" @submit.prevent="signin" v-if="$store.state.isSignIn">
       <input type="text" name="name" placeholder="Username/Email" v-model="user.name" required autofocus>
       <input type="password" name="password" placeholder="Password" v-model="user.password" required>
       <input type="submit" value="Sign In">
@@ -18,7 +18,7 @@
       <input type="password" name="password" placeholder="Password" v-model="user.password" required>
       <input type="submit" value="Sign Up">
     </form>
-    <input type="button" :value="isSignIn ? 'Sign Up' : 'Sign In'" class="sign-in-up" @click="signInOrUp">
+    <input type="button" :value="$store.state.isSignIn ? 'Sign Up' : 'Sign In'" class="sign-in-up" @click="signInOrUp">
   </div>
 </template>
 
@@ -37,7 +37,6 @@
           password: '',
           email: '',
         },
-        isSignIn: true,
         userExist: false,
         signInCount: 0,
         oauth: [
@@ -48,12 +47,19 @@
         ],
       }
     },
+    mounted () {
+      const user = this.$store.state.user;
+      if (user) {
+        this.user.username = user.username;
+        this.user.email = user.email;
+      }
+    },
     methods: {
       oauthImgPath (name) {
           return require('../assets/oauth/' + name + '.svg');
       },
       signInOrUp () {
-        this.isSignIn = !this.isSignIn;
+        this.$store.commit('setSignIn', !this.$store.state.isSignIn);
       },
       signin () {
         if (this.signInCount > 5) {

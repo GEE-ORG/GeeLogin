@@ -21,9 +21,31 @@ export default async function (req, res) {
             username: session.username,
             avatar: session.avatar,
             email: session.email,
+            source: ''
         };
         if (session.type === 'oauth') {
-            userProfile.source = session.source;
+            const uid = await OAuth.find({
+                attributes: ['uid'],
+                where: {
+                    id: session.uid
+                }
+            }).then(data => data.get('uid') || null);
+            if (uid) {
+                const oauthToUser = await User.find({
+                    where: {
+                        uid: uid
+                    }
+                }).then(data => {
+                    return {
+                        username: data.get('username'),
+                        avatar: data.get('avatar'),
+                        email: data.get('email')
+                    }
+                });
+                Object.assign(userProfile, oauthToUser);
+            } else {
+                userProfile.source = session.source;
+            }
         }
         res.json({
             state: 1,

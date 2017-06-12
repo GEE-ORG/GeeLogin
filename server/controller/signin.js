@@ -2,6 +2,7 @@
  * Created by geeku on 10/06/2017.
  */
 import User from '../model/User';
+import OAuth from '../model/OAuth';
 import { encryptPassword, md5 } from '../utils/crypto';
 import CONST from '../utils/const';
 
@@ -49,9 +50,28 @@ export default async function (req, res) {
         return;
     }
 
+    if (
+        session.isLogin === true &&
+        session.type === 'oauth'
+    ) {
+        const update = await OAuth.update({
+            uid: user.uid
+        }, {
+            where: {
+                id: session.uid
+            }
+        }).then(data => data);
+        if (!update) {
+            res.json({
+                state: -1,
+                msg: 'Link failed!'
+            });
+        }
+    }
+
     session.isLogin = true;
     session.type = 'user';
-    session.uid = user.id;
+    session.uid = user.uid;
     session.username = user.username;
     session.avatar = user.avatar;
     session.email = user.email;
