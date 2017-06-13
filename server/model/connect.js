@@ -9,4 +9,13 @@ const db = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password
     dialect: dbConfig.dialect,
 });
 
+db
+    .authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
+
 export default db;
