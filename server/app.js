@@ -17,6 +17,7 @@ import Signup from './controller/signup';
 import graphqlHTTP from 'express-graphql';
 
 import DBSync from './model/sync';
+import config from './conf/config';
 
 // DBSync(true) will drop all tables and create new tables
 DBSync();
@@ -95,6 +96,6 @@ app.get('/session', function (req, res) {
     });
 });
 
-app.listen(3000, function () {
-	console.log('I\'m listening on port 3000! ψ(｀∇´)ψ');
+app.listen(config.port, function () {
+	console.log(`I'm listening on port ${config.port}! ψ(｀∇´)ψ`);
 });
