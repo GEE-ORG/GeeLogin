@@ -7,6 +7,7 @@ import dbConfig from '../conf/database';
 const db = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
+    dialectOptions: dbConfig.dialectOptions
 });
 
 db
