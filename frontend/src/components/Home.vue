@@ -74,6 +74,10 @@
           if (data.state < 0) {
 
           } else {
+            if (data.redirect) {
+                window.location.href = data.redirect;
+                return;
+            }
             this.$router.push({'name': 'Profile'});
           }
         });

@@ -52,6 +52,7 @@ app.get('/', function (req, res) {
 
     if (session.isLogin === true && session.redirectUrl) {
         const redirectUrl = `${session.redirectUrl}/?sessionid=${session.id}`;
+        session.redirectUrl = '';
         res.redirect(redirectUrl);
         return;
     }

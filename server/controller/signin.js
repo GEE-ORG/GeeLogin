@@ -78,8 +78,14 @@ export default async function (req, res) {
 
     console.log(session);
 
-    res.json({
+    const retMsg = {
         state: 1,
         msg: 'Sign in successful!'
-    });
+    };
+    if (session.isLogin === true && session.redirectUrl) {
+        const redirectUrl = `${session.redirectUrl}/?sessionid=${session.id}`;
+        retMsg.redirect = redirectUrl;
+        session.redirectUrl = '';
+    }
+    res.json(retMsg);
 }
