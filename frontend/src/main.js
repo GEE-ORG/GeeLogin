@@ -48,7 +48,7 @@ if (!Vue.prototype.$http) {
       method,
       baseURL: process.env.NODE_ENV === 'development' ?
         'http://localhost:3001' :
-        'https://login.geeku.net/',
+        'https://account.geeku.net/',
       url,
       data,
       headers,
